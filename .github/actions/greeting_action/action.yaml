@@ -5,12 +5,19 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+outputs:
+  greeted_names:
+    description: 'Names of the people greeted'
+    value: ${{ steps.greeting.outputs.greeted_names }}
 
 runs:
   using: "composite"
   steps:
-    - name: Set Greeting
-      run: echo "Hello $INPUT_WHO_TO_GREET."
+    - name: greeting
+      id: greeting
+      run: |
+        echo "Hello $INPUT_WHO_TO_GREET."
+        echo "greeted_names=${{ inputs.names }} and 1 more person" >> $GITHUB_OUTPUT
       shell: bash
       env:
         INPUT_WHO_TO_GREET: ${{ inputs.who-to-greet }}

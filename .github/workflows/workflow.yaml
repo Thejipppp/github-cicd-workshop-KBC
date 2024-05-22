@@ -15,6 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Greet
+        id: greet
         uses: ./.github/actions/greeting_action
         with:
           who-to-greet: Jesper
+      - name: greet a lot
+        id: greet_a_lot
+        if: ${{ contains(${{ steps.greet.outputs.greeted_names }}, ' more ') }}
+        run: echo "You are with more than one person!"
+      - name: greet alone
+        id: greet_alone
+        if: ${{ ! contains(${{ steps.greet.outputs.greeted_names }}, ' more ') }}
+        run: echo "You are alone!"
