@@ -21,9 +21,9 @@ jobs:
           who-to-greet: Jesper
       - name: greet a lot
         id: greet_a_lot
-        if: ${{ contains(${{ steps.greet.outputs.greeted_names }}, ' more ') }}
+        if: ${{ contains('${{ steps.greet.outputs.greeted_names }}', ' more ') }}
         run: echo "You are with more than one person!"
       - name: greet alone
         id: greet_alone
-        if: ${{ ! contains(${{ steps.greet.outputs.greeted_names }}, ' more ') }}
+        if: ${{ ! contains('${{ steps.greet.outputs.greeted_names }}', ' more ') }}
         run: echo "You are alone!"
