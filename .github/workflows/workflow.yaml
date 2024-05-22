@@ -1,31 +1,24 @@
-name: Greet
+name: Stress Test Workflow
 
 on:
-  push:
-    branches:
-      - master
-
+  pull_request:
+    branches: [master]
 
 jobs:
-  greet:
-    runs-on: ubuntu-latest
+  stress-test:
+    runs-on: self-hosted
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Greet
-        id: greet
-        uses: ./.github/actions/greeting_action
-        with:
-          who-to-greet: Jesper
-      - name: greet a lot
-        id: greet_a_lot
-        if: ${{ contains(steps.greet.outputs.greeted_names, 'more') }}
-        run: echo "You are with more than one person $VAR!"
-        env:
-          VAR: ${{ steps.greet.outputs.greeted_names }}
-      - name: greet alone
-        id: greet_alone
-        if: ${{ ! contains(steps.greet.outputs.greeted_names, 'more') }}
-        run: echo "You are alone $VAR!"
-        env:
-          VAR: ${{ steps.greet.outputs.greeted_names }}
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install stress-ng
+      run: sudo apt-get update && sudo apt-get install -y stress-ng
+
+    - name: Run stress-ng
+      run: |
+        echo "Starting stress test"
+        stress-ng --cpu 4 --io 4 --vm 2 --vm-bytes 2G --timeout 300s --metrics-brief
+
+
+
