@@ -1,4 +1,4 @@
-name: Stress test workflow
+name: Stress test workflow for workshop
 
 on:
   push:
